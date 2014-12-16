@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,8 +11,8 @@ $app = new Application();
 $app['debug'] = true;
 
 $app->get('/load', function (Request $request) use ($app) {
-	
-	$data = parse_signed_request($request->get('signed_payload'));
+
+	$data = verifySignedRequest($request->get('signed_payload'));
 	if (empty($data)) {
 		return 'Invalid signed_payload.';
 	}
@@ -22,7 +22,7 @@ $app->get('/load', function (Request $request) use ($app) {
 	if (empty($user)) {
 		return 'Invalid user.';
 	}
-	return 'Welcome '.json_encode($user);
+	return 'Welcome ' . json_encode($user);
 });
 
 $app->get('/auth/callback', function (Request $request) use ($app) {
@@ -51,41 +51,29 @@ $app->get('/auth/callback', function (Request $request) use ($app) {
 		$redis = new Credis_Client('localhost');
 		$redis->set($key, json_encode($data['user'], true));
 
-		return 'Hello '.json_encode($data);
+		return 'Hello ' . json_encode($data);
 	} else {
-		return 'Something went wrong... ['.$resp->getStatusCode().'] '.$resp->getBody();	
+		return 'Something went wrong... [' . $resp->getStatusCode() . '] ' . $resp->getBody();
 	}
-		
-	
-	
+
 });
 
-function parse_signed_request($signed_request)
+function verifySignedRequest($signedRequest)
 {
+	list($encodedData, $encodedSignature) = explode('.', $signedRequest, 2);
 
-	list($payload, $encoded_sig) = explode('.', $signed_request, 2); 
-	
 	// decode the data
-	$sig = base64_decode($encoded_sig);
-	$data = json_decode(base64_decode($payload), true);
-	
+	$signature = base64_decode($encodedSignature);
+	$jsonStr = base64_decode($encodedData);
+	$data = json_decode($jsonStr, true);
+
 	// confirm the signature
-	$expected_sig = hash_hmac('sha256', $payload, clientSecret(), $raw = true);
-	if (time_strcmp($sig, $expected_sig)) {
-		error_log('Bad Signed JSON signature!');
+	$expectedSignature = hash_hmac('sha256', $jsonStr, clientSecret(), $raw = false);
+	if (!hash_equals($expectedSignature, $signature)) {
+		error_log('Bad signed request from BigCommerce!');
 		return null;
 	}
-
 	return $data;
-}
-
-function time_strcmp($str1, $str2)
-{
-	$res = $str1 ^ $str2;
-	$ret = strlen($str1) ^ strlen($str2); //not the same length, then fail ($ret != 0)
-	for($i = strlen($res) - 1; $i >= 0; $i--)
-		$ret += ord($res[$i]);
-  	return !$ret;
 }
 
 function clientId()

@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e0ca794e099b0b3d65580422d7f581eb",
+    "hash": "5af717ba83b5c378ee5d11532e035fee",
     "packages": [
         {
             "name": "colinmollenhour/credis",
@@ -372,6 +372,44 @@
                 "psr-3"
             ],
             "time": "2012-12-21 11:40:51"
+        },
+        {
+            "name": "realityking/hash_equals",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/realityking/hash_equals.git",
+                "reference": "c94c380358f0649d4efe09c59fa94d16a65607bf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/realityking/hash_equals/zipball/c94c380358f0649d4efe09c59fa94d16a65607bf",
+                "reference": "c94c380358f0649d4efe09c59fa94d16a65607bf",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/hash_equals.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rouven Weßling",
+                    "homepage": "http://rouvenwessling.de"
+                }
+            ],
+            "description": "Provides functionality for hash_equals() to projects using PHP earlier than version 5.6.",
+            "homepage": "https://github.com/realityking/hash_equals",
+            "keywords": [
+                "hash",
+                "timing attack"
+            ],
+            "time": "2014-04-14 18:33:30"
         },
         {
             "name": "silex/silex",
@@ -765,7 +803,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "realityking/hash_equals": 20
+    },
     "prefer-stable": false,
     "platform": [],
     "platform-dev": []

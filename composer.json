@@ -1,8 +1,9 @@
 {
-    "require": {
-		"silex/silex": "1.*",
-        "guzzle/guzzle": "~3.7",
-        "propel/propel1": "~1.6",
-        "colinmollenhour/credis": "~1.2"
-    }
+  "require": {
+    "silex/silex": "1.*",
+    "guzzle/guzzle": "~3.7",
+    "propel/propel1": "~1.6",
+    "colinmollenhour/credis": "~1.2",
+    "realityking/hash_equals": "dev-master"
+  }
 }
