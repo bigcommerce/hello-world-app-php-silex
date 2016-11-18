@@ -1,0 +1,11 @@
+RewriteEngine on
+#RewriteBase /
+
+# only rewrite if the requested file doesn't exist
+RewriteCond %{REQUEST_FILENAME} !-s
+
+# pass the rest of the request into index.php to handle
+RewriteRule ^(.*)$ /index.php/$1 [L]
+
+# Prevent the web from seeing the readme.md just to be safe
+RewriteRule ^README\.MD$ - [L,F]

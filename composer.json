@@ -4,6 +4,10 @@
     "guzzle/guzzle": "~3.7",
     "propel/propel1": "~1.6",
     "colinmollenhour/credis": "~1.2",
-    "realityking/hash_equals": "dev-master"
+    "realityking/hash_equals": "dev-master",
+    "vlucas/phpdotenv": "~2.4",
+    "firebase/php-jwt": "~4.0",
+    "bigcommerce/api": "~3.0",
+    "xamin/handlebars.php": "~0.10"
   }
 }

@@ -1,0 +1,31 @@
+<div class="Block RecentPurchases Moveable Panel" id="SideRecentPurchases">
+    <h3>Your Recently Purchased Products</h3>
+    <div class="BlockContent">
+        <ul class="ProductList">
+            {{#each products}}
+            <li class="<%= 'Odd' if i%2 == 1 %>" style="min-height: 331px;">
+                <div class="ProductImage QuickView" data-product="{{id}}">
+                    <a href="{{custom_url}}" style="height: 225px;">
+                        <img src="{{primary_image.thumbnail_url}}"
+                             alt="{{name}}">
+                    </a>
+                </div>
+                <div class="ProductDetails" style="min-height: 59px;">
+                    <a href="{{custom_url}}" class="pname">
+                        {{name}}
+                    </a>
+                </div>
+                <em class="p-price">
+            <span class="SalePrice">
+              {{calculated_price}}
+            </span>
+                </em>
+                <div class="ProductActionAdd">
+                    <a href="/cart.php?action=add&amp;product_id={{id}}" class="btn icon-Add To Cart">
+                        Add To Cart</a>
+                </div>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+</div>​
