@@ -25,6 +25,8 @@ app on the public Internet.
   * _Uninstall Callback URL_: `https://<app hostname>/bigcommerce/uninstall`
   * _Remove User Callback URL_: `https://<app hostname>/bigcommerce/remove-user` (if enabling your app for multiple users)
 5. Enable the _Products - Read Only_ scope under _OAuth scopes_, which is what this sample app needs.
+    **Note:** If you are managing customer information through the API (such as with the _Recently Purchased Products Block_ example below) then you will need to also enable the _Customers_ scope to at least read data.
+  below) then you will need to also enable the _Customers_ scope to at least read.
 6. Click `Save & Close` on the top right of the dialog.
 7. You'll now see your app in a list in the _My Apps_ section of Developer Portal. Hover over it and click
 _View Client ID_. You'll need these values in the next step.
