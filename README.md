@@ -25,6 +25,8 @@ app on the public Internet.
   * _Uninstall Callback URL_: `https://<app hostname>/bigcommerce/uninstall`
   * _Remove User Callback URL_: `https://<app hostname>/bigcommerce/remove-user` (if enabling your app for multiple users)
 5. Enable the _Products - Read Only_ scope under _OAuth scopes_, which is what this sample app needs.
+    **Note:** If you are managing customer information through the API (such as with the _Recently Purchased Products Block_ example below) then you will need to also enable the _Customers_ scope to at least read data.
+  below) then you will need to also enable the _Customers_ scope to at least read.
 6. Click `Save & Close` on the top right of the dialog.
 7. You'll now see your app in a list in the _My Apps_ section of Developer Portal. Hover over it and click
 _View Client ID_. You'll need these values in the next step.
@@ -37,11 +39,12 @@ _View Client ID_. You'll need these values in the next step.
 3. Use Composer to install the dependencies.
 
         php composer.phar install
-4. Use the method appropriate to your operating system and web server software to add the following environment variables.
+4. Copy `.env-example` to `.env` and set the following environment variables in it.
 
         BC_AUTH_SERVICE=https://login.bigcommerce.com
         BC_CLIENT_ID=<contents of Client ID field>
         BC_CLIENT_SECRET=<contents of Client Secret field>
+        BC_CALLBACK_URL=<URL TO YOUR AUTH CALLBACK ENDPOINT>
 4. Restart the software or the entire host as needed to set the environment variables.
 
 ### Hosting the app
@@ -59,7 +62,7 @@ the toolbelt. See [Heroku][toolbelt] for details._
 
 In the [BigCommerce Developer Portal][devportal], you'll need to update the app's callback URLs:
 
-* _Auth Callback URL_: `https://<appname>.herokuapp.com/auth/bigcommerce/callback`
+* _Auth Callback URL_: `https://<appname>.herokuapp.com/auth/callback`
 * _Load Callback URL_: `https://<appname>.herokuapp.com/load`
 * _Uninstall Callback URL_: `https://<appname>.herokuapp.com/uninstall`
 
@@ -67,6 +70,32 @@ In the [BigCommerce Developer Portal][devportal], you'll need to update the app'
 * Login to your trial store
 * Go to the Marketplace and click _My Drafts_. Find the app you just created and click it.
 * A details dialog will open. Click _Install_ and the draft app will be installed in your store.
+
+## Showing the Recently Purchased Products Block with JWT
+This example repo contains the ability to securely show recently purchased products. This is how it looks:
+
+![](http://monosnap.com/image/iuFxhuS8havstVdzNHQGjz2aDmzDwO.png)
+
+### Adding the block to your theme
+1. Edit your `Footer.html` file in blueprint or Footer Scripts if you're using Stencil and add:
+    ```javascript
+    <script>
+    var appClientId = "**BC_CLIENT_ID**"; // TODO: Fill this in with your app's client ID.
+    var storeHash = "**TEST_STORE_HASH**"; // TODO: Fill this in wit the test store's store hash (found in base url before the `store-` part)
+    var appUrl = "**APP_URL**"; // TODO: Replace this with the URL to your app.
+
+    // Get the JWT token from the BC server signed first.
+    $.get('/customer/current.jwt?app_client_id='+appClientId, function(jwtToken) {
+      // Now that we have the JWT token, use it to get the recent purchases block.
+      $.get(appUrl+'/storefront/'+storeHash+'/customers/'+jwtToken+'/recently_purchased.html', function(htmlContent) {
+        $('#recent_purchases_block').html(htmlContent, true);
+      });
+    });
+    </script>
+    ```
+2. Put `<div id="recent_purchases_block"></div>` wherever you want the block to appear. If you're using blueprint it is recommended that you put it in default.html right before `%%Panel.SideTopSellers%%`.
+3. Log in as a customer in your store's frontend (or create a customer account if one doesn't exist yet), place an order then go to the section where you added the `<div id="recent_purchases_block"></div>`. You should see the Recently Purchased Products block appear.
+
 
 
 [single_click_apps]: https://developer.bigcommerce.com/api/#building-oauth-apps
