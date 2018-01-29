@@ -28,9 +28,10 @@ $app->get('/load', function (Request $request) use ($app) {
 	$key = getUserKey($data['store_hash'], $data['user']['email']);
 	$user = json_decode($redis->get($key), true);
 	if (empty($user)) {
-		return 'Invalid user.';
+		$user = $data['user'];
+		$redis->set($key, json_encode($user, true));
 	}
-	return 'Welcome ' . json_encode($user);
+	return 'Welcome ' . json_encode($user, true);
 });
 
 $app->get('/auth/callback', function (Request $request) use ($app) {
@@ -66,6 +67,19 @@ $app->get('/auth/callback', function (Request $request) use ($app) {
 		return 'Something went wrong... [' . $resp->getStatusCode() . '] ' . $resp->getBody();
 	}
 
+});
+
+// Endpoint for removing users in a multi-user setup
+$app->get('/remove-user', function(Request $request) use ($app) {
+	$data = verifySignedRequest($request->get('signed_payload'));
+	if (empty($data)) {
+		return 'Invalid signed_payload.';
+	}
+
+	$key = getUserKey($data['store_hash'], $data['user']['email']);
+	$redis = new Credis_Client('localhost');
+	$redis->del($key);
+	return '[Remove User] '.$data['user']['email'];
 });
 
 /**
@@ -174,7 +188,7 @@ function getAuthToken($storeHash)
 }
 
 /**
- * @param string $jwtToken 	customer's JWT token sent from the storefront.
+ * @param string $jwtToken	customer's JWT token sent from the storefront.
  * @return string customer's ID decoded and verified
  */
 function getCustomerIdFromToken($jwtToken)
