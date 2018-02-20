@@ -57,7 +57,7 @@ the toolbelt. See [Heroku][toolbelt] for details._
 * Create a new Heroku app: `heroku create <appname>`
 * Push the project to Heroku: `git push heroku master -u`
 * Set `APP_URL` in .env to `https://<appname>.herokuapp.com`
-* Add the `heroku-config` plugin: `heroku plugins:install git://github.com/ddollar/heroku-config.git`
+* Add the `heroku-config` plugin: `heroku plugins:install heroku-config`
 * Push the local environment variables to heroku: `heroku config:push`
 
 In the [BigCommerce Developer Portal][devportal], you'll need to update the app's callback URLs:
