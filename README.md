@@ -11,6 +11,7 @@ to running and installing this sample application.
 * A web server such as MAMP or Apache. A localhost address will work fine for the hello world app.
 * PHP
 * [Composer](https://getcomposer.org/doc/00-intro.md "Composer")
+* Redis
 
 ### Registering the app with BigCommerce
 1. Create a trial store on [BigCommerce](https://www.bigcommerce.com/)
